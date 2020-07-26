@@ -49,8 +49,8 @@ TEST_CASE("Test Accumulate")
 {
     vector<int> result1 = {3,7,12,18,25,33};
     int j = 0;
-
-    for (int i: accumulate(range(3,9))) // 3, 3+4, 3+4+5, 3+4+5+6, 3+4+5+6+7, 3+4+5+6+7+8 = 3,7,12,18,25,33
+    range r39(3,9);
+    for (int i: accumulate(r39)) // 3, 3+4, 3+4+5, 3+4+5+6, 3+4+5+6+7, 3+4+5+6+7+8 = 3,7,12,18,25,33
     {
         CHECK(i == result1.at(j));
         ++j;
@@ -80,7 +80,7 @@ TEST_CASE("Test Accumulate")
     j=0;
     vector<int> result3 = {3,12,60,360,2520,20160};
 
-    for (int i: accumulate(range(3,9),[](int x, int y){return x*y;})) // 3,12,60,360,2520,20160
+    for (int i: accumulate(r39, [](int x, int y){return x*y;})) // 3,12,60,360,2520,20160
     {
         CHECK(i == result3.at(j));
         ++j;
@@ -91,7 +91,7 @@ TEST_CASE("Test Accumulate")
     result3.clear();
 
     result3 = {3,7,12,18,25,33};
-    for (int i: accumulate(range(3,9),[](int x, int y){return x+y;})) // 3,7,12,18,25,33
+    for (int i: accumulate(r39, [](int x, int y){return x+y;})) // 3,7,12,18,25,33
     {
         CHECK(i == result3.at(j));
         ++j;
@@ -101,7 +101,7 @@ TEST_CASE("Test Accumulate")
     j=0;
     vector<int> set1 = {3,12,60,360,2520,20160};
     set<int> myset = {3,4,5,6,7,8};
-    for (int i: accumulate(myset,[](int x, int y){return x*y;})) //3,3*4,3*4*5 ...
+    for (int i: accumulate(myset, [](int x, int y){return x*y;})) //3,3*4,3*4*5 ...
     {
         CHECK(i == set1.at(j));
         ++j;
@@ -118,7 +118,8 @@ TEST_CASE("Test Filterfalse")
 {
     vector<int> result = {5,7};
     int j = 0;
-    for (auto i: filterfalse([](int i){return i%2==0;}, range(5,9)) )
+    range r59(5,9);
+    for (auto i: filterfalse([](int i){return i%2==0;}, r59) )
     {
         CHECK(i == result.at(j));
         ++j;
@@ -130,7 +131,7 @@ TEST_CASE("Test Filterfalse")
     j = 0;
 
     result = {6,8};
-    for (auto i: filterfalse([](int i){return i%2!=0;}, range(5,9)) )
+    for (auto i: filterfalse([](int i){return i%2!=0;}, r59) )
     {
         CHECK(i == result.at(j));
         ++j;
@@ -194,9 +195,8 @@ TEST_CASE("Test Compress")
 {
     vector<int> result = {7};
     int j = 0;
-    vector<bool> myvectorBool1 = {false,false,true,false};
-    for (auto i: compress(range(5,9), myvectorBool1) )
-    {
+    vector<bool> fftf {false,false,true,false};
+    for (auto i: compress(range(5,9), fftf) )  {
         CHECK(i == result.at(j));
         ++j;
     }
@@ -208,8 +208,8 @@ TEST_CASE("Test Compress")
     result = {1,7,11,20};
     j = 0;
     vector<int> myvec = {1,3,7,10,11,16,20};
-    vector<bool> myvecBool = {true,false,true,false,true,false,true};
-    for (auto i: compress(myvec, myvecBool) )
+    vector<bool> tftftft {true,false,true,false,true,false,true};
+    for (auto i: compress(myvec, tftftft) )
     {
         CHECK(i == result.at(j));
         ++j;
@@ -223,10 +223,9 @@ TEST_CASE("Test Compress")
     vector<char> resultString = {'I','L', 'o', 'v', 'e', 'C', '+','+'};
     j = 0;
 
-    vector<bool> myVectorBool {true,false,false,false,true,true,true,true,true,true,true};
-    
-    for (auto i: compress(string("InotLoveC++"), myVectorBool))
-    {
+    vector<bool> tfffttttttt {true,false,false,false,true,true,true,true,true,true,true};
+    string s1 {"InotLoveC++"};
+    for (auto i: compress(s1, tfffttttttt)) {
         CHECK(resultString.at(j) == i);
         ++j;
     }
@@ -252,3 +251,4 @@ TEST_CASE("Test Compress")
 
 
 }
+
